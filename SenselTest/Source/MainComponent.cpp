@@ -17,9 +17,7 @@ MainComponent::MainComponent()
 
     // specify the number of input and output channels that we want to open
     setAudioChannels(2, 2);
-    startTimer(1.0/150.0);
-    
-    
+    startTimer(1.0 / 150.0);
 }
 
 MainComponent::~MainComponent()
@@ -32,12 +30,13 @@ void MainComponent::hiResTimerCallback()
 {
     for (auto sensel : sensels)
     {
-    sensel->check();
-
-    cout << "Finger[" << 0 << "] ID: " << sensel->mFingers[0].fingerID.load() << "\n";
-    cout << "Finger[" << 0 << "] delta x: " << sensel->mFingers[0].delta_x.load() << "\n";
-    cout << "Finger[" << 0 << "] delta y: " << sensel->mFingers[0].delta_y.load() << "\n";
-        
+        sensel->check();
+        if (sensel->mFingers[0].state.load())
+        {
+            cout << "Finger[" << sensel->senselIndex << "] ID: " << sensel->mFingers[0].fingerID.load() << "\n";
+            cout << "Finger[" << sensel->senselIndex << "] delta x: " << sensel->mFingers[0].delta_x.load() << "\n";
+            cout << "Finger[" << sensel->senselIndex << "] delta y: " << sensel->mFingers[0].delta_y.load() << "\n";
+        }
     }
 }
 //==============================================================================
@@ -56,7 +55,7 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
 
 void MainComponent::getNextAudioBlock(const AudioSourceChannelInfo &bufferToFill)
 {
-    
+
     // Your audio-processing code goes here!
 
     // For more details, see the help for AudioProcessor::getNextAudioBlock()

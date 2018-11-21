@@ -22,15 +22,14 @@ class Sensel
   public:
     Sensel()
     {
-        
         senselGetDeviceList(&list);
-        
+
         // Get a list of avaialble Sensel devices
-        cout << "Devices available: " << list.num_devices << "\n";
-        cout << "name of device: " << list.devices << "\n";
-        cout << "Device 0: " << list.devices[0].idx << "\n";
-        cout << "Device 1: " << list.devices[1].idx << "\n";
-        
+        //cout << "Devices available: " << list.num_devices << "\n";
+        //cout << "name of device: " << list.devices << "\n";
+        //cout << "Device 0: " << list.devices[0].idx << "\n";
+        //cout << "Device 1: " << list.devices[1].idx << "\n";
+
         if (list.num_devices == 0)
         {
             fprintf(stdout, "No Sensel device found.\n");
@@ -43,30 +42,31 @@ class Sensel
         }
 
         //Open a Sensel device by the id in the SenselDeviceList, handle initialized
-        senselOpenDeviceByID(&handle, list.devices[0].idx);
+        senselOpenDeviceByID(&handle, list.devices[senselIndex].idx);
         //Set the frame content to scan contact data
         senselSetFrameContent(handle, FRAME_CONTENT_CONTACTS_MASK);
         //Allocate a frame of data, must be done before reading frame data
         senselAllocateFrameData(handle, &frame);
-        
+
         senselSetContactsMask(handle, CONTACT_MASK_DELTAS);
-        
+
         //Start scanning the Sensel device
         senselStartScanning(handle);
     }
-    
+
     // ID contructor for when you want more sensels
     Sensel(unsigned int senselID)
     {
-        
+        senselIndex = senselID;
+
         senselGetDeviceList(&list);
-        
+
         // Get a list of avaialble Sensel devices
-        cout << "Devices available: " << list.num_devices << "\n";
-        cout << "name of device: " << list.devices << "\n";
+        //cout << "Devices available: " << list.num_devices << "\n";
+        //cout << "name of device: " << list.devices << "\n";
         //cout << "Device 0: " << list.devices[0].idx << "\n";
         //cout << "Device 1: " << list.devices[1].idx << "\n";
-        
+
         if (list.num_devices == 0)
         {
             fprintf(stdout, "No Sensel device found.\n");
@@ -77,16 +77,16 @@ class Sensel
             fprintf(stdout, "Sensel device detected.\n");
             senselDetected = true;
         }
-        
+
         //Open a Sensel device by the id in the SenselDeviceList, handle initialized
-        senselOpenDeviceByID(&handle, list.devices[senselID].idx);
+        senselOpenDeviceByID(&handle, list.devices[senselIndex].idx);
         //Set the frame content to scan contact data
         senselSetFrameContent(handle, FRAME_CONTENT_CONTACTS_MASK);
         //Allocate a frame of data, must be done before reading frame data
         senselAllocateFrameData(handle, &frame);
-        
+
         senselSetContactsMask(handle, CONTACT_MASK_DELTAS);
-        
+
         //Start scanning the Sensel device
         senselStartScanning(handle);
     }
@@ -113,6 +113,7 @@ class Sensel
                 {
                     for (int c = 0; c < frame->n_contacts; c++)
                     {
+                        // mapping
                         unsigned int state = frame->contacts[c].state;
                         float force = frame->contacts[c].total_force / 8192.0f;
                         float x = frame->contacts[c].x_pos / 240.0f;
@@ -159,7 +160,7 @@ class Sensel
                                 mFingers[c].delta_y.store(0);
                                 mFingers[c].fingerID.store(-1);
                                 //idx--;
-                                
+
                                 //cout << "ID[" << c << "] ID: " << idx << "\n";
                             }
                         }
@@ -167,11 +168,10 @@ class Sensel
                 }
             }
         }
-        //else
-        //    fprintf(stdout, "No Sensel device found.\n");
     }
 
     array<Contact, 20> mFingers;
+    unsigned int senselIndex = 0;
     int idx = -1;
     bool senselDetected = false;
 
