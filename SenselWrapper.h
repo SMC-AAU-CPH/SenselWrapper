@@ -22,12 +22,15 @@ class Sensel
   public:
     Sensel()
     {
-        // Get a list of avaialble Sensel devices
-        // cout << "Devices available: " << list.num_devices << "\n";
-        // cout << "name of device: " << list.devices << "\n";
-        // cout << "Device 0: " << list.devices[0].idx << "\n";
+        
         senselGetDeviceList(&list);
-
+        
+        // Get a list of avaialble Sensel devices
+        cout << "Devices available: " << list.num_devices << "\n";
+        cout << "name of device: " << list.devices << "\n";
+        cout << "Device 0: " << list.devices[0].idx << "\n";
+        cout << "Device 1: " << list.devices[1].idx << "\n";
+        
         if (list.num_devices == 0)
         {
             fprintf(stdout, "No Sensel device found.\n");
@@ -51,7 +54,42 @@ class Sensel
         //Start scanning the Sensel device
         senselStartScanning(handle);
     }
-
+    
+    // ID contructor for when you want more sensels
+    Sensel(unsigned int senselID)
+    {
+        
+        senselGetDeviceList(&list);
+        
+        // Get a list of avaialble Sensel devices
+        cout << "Devices available: " << list.num_devices << "\n";
+        cout << "name of device: " << list.devices << "\n";
+        //cout << "Device 0: " << list.devices[0].idx << "\n";
+        //cout << "Device 1: " << list.devices[1].idx << "\n";
+        
+        if (list.num_devices == 0)
+        {
+            fprintf(stdout, "No Sensel device found.\n");
+            return;
+        }
+        else
+        {
+            fprintf(stdout, "Sensel device detected.\n");
+            senselDetected = true;
+        }
+        
+        //Open a Sensel device by the id in the SenselDeviceList, handle initialized
+        senselOpenDeviceByID(&handle, list.devices[senselID].idx);
+        //Set the frame content to scan contact data
+        senselSetFrameContent(handle, FRAME_CONTENT_CONTACTS_MASK);
+        //Allocate a frame of data, must be done before reading frame data
+        senselAllocateFrameData(handle, &frame);
+        
+        senselSetContactsMask(handle, CONTACT_MASK_DELTAS);
+        
+        //Start scanning the Sensel device
+        senselStartScanning(handle);
+    }
     void check()
     {
         for (int i = 0; i < mFingers.size(); i++)
