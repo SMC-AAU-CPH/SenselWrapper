@@ -31,12 +31,15 @@ void MainComponent::hiResTimerCallback()
     for (auto sensel : sensels)
     {
         sensel->check();
-        if (sensel->mFingers[0].state.load())
-        {
-            cout << "Finger[" << sensel->senselIndex << "] ID: " << sensel->mFingers[0].fingerID.load() << "\n";
-            cout << "Finger[" << sensel->senselIndex << "] delta x: " << sensel->mFingers[0].delta_x.load() << "\n";
-            cout << "Finger[" << sensel->senselIndex << "] delta y: " << sensel->mFingers[0].delta_y.load() << "\n";
-        }
+        
+        unsigned int fingerCount = sensel->contactAmount;
+        
+        for (int f = 0; f < fingerCount; f++)
+            if (sensel->mFingers[f].state.load())
+                cout << "Sensel[" << sensel->senselIndex << "] Finger ID: " << sensel->mFingers[f].fingerID.load() << "\n";
+            //cout << "Sensel[" << sensel->senselIndex << "] delta x: " << sensel->mFingers[0].delta_x.load() << "\n";
+            //cout << "Sensel[" << sensel->senselIndex << "] delta y: " << sensel->mFingers[0].delta_y.load() << "\n";
+        
     }
 }
 //==============================================================================
@@ -49,8 +52,11 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
     // but be careful - it will be called on the audio thread, not the GUI thread.
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
-    sensels.add(new Sensel(0));
-    sensels.add(new Sensel(1));
+
+    for (int i = 0; i < amountOfSensels; i++)
+    {
+        sensels.add(new Sensel(i)); // chooses the device in the sensel device list
+    }
 }
 
 void MainComponent::getNextAudioBlock(const AudioSourceChannelInfo &bufferToFill)

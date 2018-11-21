@@ -107,11 +107,12 @@ class Sensel
             {
                 //Read one frame of data
                 senselGetFrame(handle, frame);
-
+                
+                contactAmount = frame->n_contacts;
                 // Get contact data
-                if (frame->n_contacts > 0)
+                if (contactAmount > 0)
                 {
-                    for (int c = 0; c < frame->n_contacts; c++)
+                    for (int c = 0; c < contactAmount; c++)
                     {
                         // mapping
                         unsigned int state = frame->contacts[c].state;
@@ -174,7 +175,7 @@ class Sensel
     unsigned int senselIndex = 0;
     int idx = -1;
     bool senselDetected = false;
-
+    unsigned int contactAmount = 0;
   private:
     SENSEL_HANDLE handle = NULL;
     //List of all available Sensel devices
