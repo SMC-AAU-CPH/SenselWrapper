@@ -8,13 +8,13 @@ using namespace std;
 
 struct Contact
 {
-    atomic<bool> state{false};
-    atomic<float> force{0.0};
-    atomic<float> x{0.0};
-    atomic<float> y{0.0};
-    atomic<float> delta_x{0.0};
-    atomic<float> delta_y{0.0};
-    atomic<int> fingerID{-1};
+    bool state = false;
+    float force = 0.0;
+    float x = 0.0;
+    float y = 0.0;
+    float delta_x = 0.0;
+    float delta_y = 0.0;
+    int fingerID = -1;
 };
 
 class Sensel
@@ -92,8 +92,8 @@ class Sensel
     }
     void check()
     {
-        for (int i = 0; i < mFingers.size(); i++)
-            mFingers[i].state.store(false);
+        //for (int i = 0; i < fingers.size(); i++)
+        //    fingers[i].state.store(false);
 
         if (senselDetected)
         {
@@ -124,45 +124,43 @@ class Sensel
 
                         if (state == CONTACT_START)
                         {
-                            if (c < mFingers.size())
+                            if (c < fingers.size())
                             {
-                                mFingers[c].state.store(true);
-                                mFingers[c].force.store(force);
-                                mFingers[c].x.store(x);
-                                mFingers[c].y.store(y);
-                                mFingers[c].delta_x.store(delta_x);
-                                mFingers[c].delta_y.store(delta_y);
-                                mFingers[c].fingerID.store(c);
-                                //cout << "Finger[" << c << "] ID: " << mFingers[c].fingerID.load() << "\n";
+                                fingers[c].state = true;
+                                fingers[c].force = force;
+                                fingers[c].x = x;
+                                fingers[c].y = y;
+                                fingers[c].delta_x = delta_x;
+                                fingers[c].delta_y = delta_y;
+                                fingers[c].fingerID = c;
+                                //cout << "Finger[" << c << "] ID: " << fingers[c].fingerID.load() << "\n";
                             }
                         }
                         else if (state == CONTACT_MOVE)
                         {
-                            if (c < mFingers.size())
+                            if (c < fingers.size())
                             {
-                                mFingers[c].state.store(true);
-                                mFingers[c].force.store(force);
-                                mFingers[c].x.store(x);
-                                mFingers[c].y.store(y);
-                                mFingers[c].delta_x.store(delta_x);
-                                mFingers[c].delta_y.store(delta_y);
+                                //fingers[c].state = true;
+                                fingers[c].force = force;
+                                fingers[c].x = x;
+                                fingers[c].y = y;
+                                fingers[c].delta_x = delta_x;
+                                fingers[c].delta_y = delta_y;
                             }
                         }
                         else if (state == CONTACT_END)
                         {
-                            if (c < mFingers.size())
+                            if (c < fingers.size())
                             {
-                                //cout << "Finger[" << c << "] ID: " << mFingers[c].fingerID.load() << "\n";
-                                mFingers[c].state.store(false);
-                                mFingers[c].force.store(0);
-                                mFingers[c].x.store(0);
-                                mFingers[c].y.store(0);
-                                mFingers[c].delta_x.store(0);
-                                mFingers[c].delta_y.store(0);
-                                mFingers[c].fingerID.store(-1);
-                                //idx--;
+   
+                                fingers[c].state = false;
+                                fingers[c].force = force;
+                                fingers[c].x = x;
+                                fingers[c].y = y;
+                                fingers[c].delta_x = delta_x;
+                                fingers[c].delta_y = delta_y;
+                                fingers[c].fingerID = -1;
 
-                                //cout << "ID[" << c << "] ID: " << idx << "\n";
                             }
                         }
                     }
@@ -171,9 +169,9 @@ class Sensel
         }
     }
 
-    array<Contact, 20> mFingers;
+    array<Contact, 20> fingers;
     unsigned int senselIndex = 0;
-    int idx = -1;
+    //int idx = -1;
     bool senselDetected = false;
     unsigned int contactAmount = 0;
   private:
