@@ -90,10 +90,10 @@ class Sensel
         //Start scanning the Sensel device
         senselStartScanning(handle);
     }
-    
-    ~Sensel()
+
+    void shutDown()
     {
-        senselClose(handle);
+       senselClose(handle);
     }
     
     void check()
