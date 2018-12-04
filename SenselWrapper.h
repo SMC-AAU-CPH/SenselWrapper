@@ -143,12 +143,12 @@ class Sensel
                                 fingers[c].y = y;
                                 fingers[c].delta_x = delta_x;
                                 fingers[c].delta_y = delta_y;
-                                fingers[c].fingerID = frame->contacts[c].id;
+                                fingers[c].fingerID = ++idx;//frame->contacts[c].id;
                                 
                                 int led = x * 24;
                                 int brightness = force * 100;
                                 senselSetLEDBrightness(handle, led, brightness);
-                                //cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
+                                cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
                             }
                         }
                         else if (state == CONTACT_MOVE)
@@ -185,7 +185,7 @@ class Sensel
                                 fingers[c].delta_x = delta_x;
                                 fingers[c].delta_y = delta_y;
                                 fingers[c].fingerID = -1;
-                                
+                                --idx;
                                 led = x * 24;
                                 senselSetLEDBrightness(handle, led, 0);
 
@@ -199,7 +199,7 @@ class Sensel
 
     array<Contact, 20> fingers;
     unsigned int senselIndex = 0;
-    //int idx = -1;
+    int idx = -1;
     bool senselDetected = false;
     unsigned int contactAmount = 0;
   private:
