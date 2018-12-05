@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="QKujkb" name="SenselTest" projectType="guiapp" jucerVersion="5.3.2">
+  <MAINGROUP id="TlImXQ" name="SenselTest">
+    <GROUP id="{18061D1F-2694-38D6-D5EC-D099BA3AFFC6}" name="Source">
+      <FILE id="VEBIRD" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="hJ3rsg" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="tFch1F" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+    <FILE id="h5WRZb" name="SenselWrapper.h" compile="0" resource="0" file="../SenselWrapper.h"/>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../../../modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../../modules"/>
+        <MODULEPATH id="juce_video" path="../../../../../modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2017 targetFolder="Builds/VisualStudio2017" externalLibraries="C:\Program Files\Sensel\SenselLib\include">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="C:\Program Files\Sensel\SenselLib\include"
+                       libraryPath="C:\Program Files\Sensel\SenselLib\include"/>
+        <CONFIGURATION isDebug="0" name="Release" headerPath="C:\Program Files\Sensel\SenselLib\include"
+                       libraryPath="C:\Program Files\Sensel\SenselLib\include"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../../../modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../../../modules"/>
+        <MODULEPATH id="juce_video" path="../../../../../modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../modules"/>
+      </MODULEPATHS>
+    </VS2017>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
