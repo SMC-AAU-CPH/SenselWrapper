@@ -17,7 +17,6 @@ MainComponent::MainComponent()
 
     // specify the number of input and output channels that we want to open
     setAudioChannels(2, 2);
-    startTimer(1000.0 / 150.0);
 }
 
 MainComponent::~MainComponent()
@@ -55,6 +54,7 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
 
     for (int i = 0; i < amountOfSensels; i++)
         sensels.add(new Sensel(i)); // chooses the device in the sensel device list
+    startTimer(1000.0 / 150.0);
     
 }
 
