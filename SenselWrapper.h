@@ -53,7 +53,7 @@ class Sensel
         //Start scanning the Sensel device
         senselStartScanning(handle);
     }
-    
+
     // ID contructor for when you want more sensels
     Sensel(unsigned int senselID)
     {
@@ -93,9 +93,9 @@ class Sensel
 
     void shutDown()
     {
-       senselClose(handle);
+        senselClose(handle);
     }
-    
+
     void check()
     {
         //for (int i = 0; i < fingers.size(); i++)
@@ -113,14 +113,14 @@ class Sensel
             {
                 //Read one frame of data
                 senselGetFrame(handle, frame);
-                
+
                 contactAmount = frame->n_contacts;
                 // Get contact data
                 if (contactAmount > 0)
                 {
                     //for (int led = 0; led < 24; led++)
                     //    senselSetLEDBrightness(handle, led, 0);
-                    
+
                     for (int c = 0; c < contactAmount; c++)
                     {
                         // mapping
@@ -133,8 +133,7 @@ class Sensel
 
                         if (state == CONTACT_START)
                         {
-                            
-                            
+
                             if (c < fingers.size())
                             {
                                 fingers[c].state = true;
@@ -143,8 +142,8 @@ class Sensel
                                 fingers[c].y = y;
                                 fingers[c].delta_x = delta_x;
                                 fingers[c].delta_y = delta_y;
-                                fingers[c].fingerID = ++idx;//frame->contacts[c].id;
-                                
+                                fingers[c].fingerID = ++idx; //frame->contacts[c].id;
+
                                 int led = x * 24;
                                 int brightness = force * 100;
                                 senselSetLEDBrightness(handle, led, brightness);
@@ -156,16 +155,16 @@ class Sensel
                             if (c < fingers.size())
                             {
                                 int led = fingers[c].x * 24;
-                                
+
                                 if (int(fingers[c].x * 24) != int(x * 24))
                                     senselSetLEDBrightness(handle, led, 0);
-                                
+
                                 fingers[c].force = force;
                                 fingers[c].x = x;
                                 fingers[c].y = y;
                                 fingers[c].delta_x = delta_x;
                                 fingers[c].delta_y = delta_y;
-                                
+
                                 led = x * 24;
                                 int brightness = force * 100;
                                 senselSetLEDBrightness(handle, led, brightness);
@@ -177,7 +176,7 @@ class Sensel
                             {
                                 int led = fingers[c].x * 24;
                                 senselSetLEDBrightness(handle, led, 0);
-                                
+
                                 fingers[c].state = false;
                                 fingers[c].force = force;
                                 fingers[c].x = x;
@@ -188,7 +187,6 @@ class Sensel
                                 --idx;
                                 led = x * 24;
                                 //senselSetLEDBrightness(handle, led, 0);
-
                             }
                         }
                     }
@@ -197,11 +195,22 @@ class Sensel
         }
     }
 
+    void addLEDBrightness(float position, float brightness)
+    {
+        if (senselDetected)
+        {
+            int led = position * 24;
+            int light = brightness * 100;
+            senselSetLEDBrightness(handle, led, light);
+        }
+    }
+
     array<Contact, 20> fingers;
     unsigned int senselIndex = 0;
     int idx = -1;
     bool senselDetected = false;
     unsigned int contactAmount = 0;
+
   private:
     SENSEL_HANDLE handle = NULL;
     //List of all available Sensel devices
