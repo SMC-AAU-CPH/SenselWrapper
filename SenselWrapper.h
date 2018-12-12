@@ -3,6 +3,7 @@
 #include "lib/sensel_device.h"
 #include <array>
 #include <atomic>
+#include <vector>
 
 using namespace std;
 
@@ -131,6 +132,12 @@ class Sensel
                         float delta_x = frame->contacts[c].delta_x;
                         float delta_y = frame->contacts[c].delta_y;
 
+                        bool setLED = true;
+
+                        for (int pos = 0; pos < LEDPositions.size(); pos++)
+                            if (LEDPositions[pos])
+                                setLED = false;
+
                         if (state == CONTACT_START)
                         {
 
@@ -144,9 +151,12 @@ class Sensel
                                 fingers[c].delta_y = delta_y;
                                 fingers[c].fingerID = ++idx; //frame->contacts[c].id;
 
-                                int led = x * 24;
-                                int brightness = force * 100;
-                                senselSetLEDBrightness(handle, led, brightness);
+                                if (setLED)
+                                {
+                                    int LED = x * 24;
+                                    int brightness = force * 100;
+                                    senselSetLEDBrightness(handle, LED, brightness);
+                                }
                                 //cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
                             }
                         }
@@ -154,20 +164,22 @@ class Sensel
                         {
                             if (c < fingers.size())
                             {
-                                int led = fingers[c].x * 24;
-
-                                if (int(fingers[c].x * 24) != int(x * 24))
-                                    senselSetLEDBrightness(handle, led, 0);
-
+                                int LED = fingers[c].x * 24;
+                                if (setLED)
+                                    if (int(fingers[c].x * 24) != int(x * 24))
+                                        senselSetLEDBrightness(handle, LED, 0);
+                                
                                 fingers[c].force = force;
                                 fingers[c].x = x;
                                 fingers[c].y = y;
                                 fingers[c].delta_x = delta_x;
                                 fingers[c].delta_y = delta_y;
-
-                                led = x * 24;
-                                int brightness = force * 100;
-                                senselSetLEDBrightness(handle, led, brightness);
+                                if (setLED)
+                                {
+                                    LED = x * 24;
+                                    int brightness = force * 100;
+                                    senselSetLEDBrightness(handle, LED, brightness);
+                                }
                             }
                         }
                         else if (state == CONTACT_END)
@@ -175,7 +187,9 @@ class Sensel
                             if (c < fingers.size())
                             {
                                 int led = fingers[c].x * 24;
-                                senselSetLEDBrightness(handle, led, 0);
+                                
+                                if (setLED)
+                                    senselSetLEDBrightness(handle, led, 0);
 
                                 fingers[c].state = false;
                                 fingers[c].force = force;
@@ -185,8 +199,6 @@ class Sensel
                                 fingers[c].delta_y = delta_y;
                                 fingers[c].fingerID = -1;
                                 --idx;
-                                led = x * 24;
-                                //senselSetLEDBrightness(handle, led, 0);
                             }
                         }
                     }
@@ -199,17 +211,21 @@ class Sensel
     {
         if (senselDetected)
         {
-            int led = position * 24;
+            int LED = position * 24;
             int light = brightness * 100;
-            senselSetLEDBrightness(handle, led, light);
+
+            senselSetLEDBrightness(handle, LED, light);
+            LEDPositions.push_back(LED);
         }
     }
 
     array<Contact, 20> fingers;
+
     unsigned int senselIndex = 0;
     int idx = -1;
     bool senselDetected = false;
     unsigned int contactAmount = 0;
+    vector<int> LEDPositions;
 
   private:
     SENSEL_HANDLE handle = NULL;
