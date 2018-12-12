@@ -148,7 +148,7 @@ class Sensel
                                 int led = x * 24;
                                 int brightness = force * 100;
                                 senselSetLEDBrightness(handle, led, brightness);
-                                cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
+                                //cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
                             }
                         }
                         else if (state == CONTACT_MOVE)
@@ -187,7 +187,7 @@ class Sensel
                                 fingers[c].fingerID = -1;
                                 --idx;
                                 led = x * 24;
-                                senselSetLEDBrightness(handle, led, 0);
+                                //senselSetLEDBrightness(handle, led, 0);
 
                             }
                         }
