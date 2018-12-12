@@ -119,8 +119,6 @@ class Sensel
                 // Get contact data
                 if (contactAmount > 0)
                 {
-                    //for (int led = 0; led < 24; led++)
-                    //    senselSetLEDBrightness(handle, led, 0);
 
                     for (int c = 0; c < contactAmount; c++)
                     {
@@ -132,74 +130,64 @@ class Sensel
                         float delta_x = frame->contacts[c].delta_x;
                         float delta_y = frame->contacts[c].delta_y;
 
+                        int LED = static_cast<int>(x * 24);
+                        int prevLED = static_cast<int>(fingers[c].x * 24);
+                        int brightness = static_cast<int>(force * 200);
+
                         bool setLED = true;
 
                         for (int pos = 0; pos < LEDPositions.size(); pos++)
-                            if (LEDPositions[pos])
+                            if (LEDPositions[pos] == LED || LEDPositions[pos] == prevLED)
                                 setLED = false;
 
-                        if (state == CONTACT_START)
+                        if (state == CONTACT_START && c < fingers.size())
                         {
 
-                            if (c < fingers.size())
-                            {
-                                fingers[c].state = true;
-                                fingers[c].force = force;
-                                fingers[c].x = x;
-                                fingers[c].y = y;
-                                fingers[c].delta_x = delta_x;
-                                fingers[c].delta_y = delta_y;
-                                fingers[c].fingerID = ++idx; //frame->contacts[c].id;
+                            fingers[c].state = true;
+                            fingers[c].force = force;
+                            fingers[c].x = x;
+                            fingers[c].y = y;
+                            fingers[c].delta_x = delta_x;
+                            fingers[c].delta_y = delta_y;
+                            fingers[c].fingerID = ++idx; //frame->contacts[c].id;
 
-                                if (setLED)
-                                {
-                                    int LED = x * 24;
-                                    int brightness = force * 100;
-                                    senselSetLEDBrightness(handle, LED, brightness);
-                                }
-                                //cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
-                            }
+                            if (setLED)
+                                senselSetLEDBrightness(handle, LED, brightness);
+
+                            //cout << "Finger[" << c << "] ID: " << fingers[c].fingerID << "\n";
                         }
-                        else if (state == CONTACT_MOVE)
+                        else if (state == CONTACT_MOVE && c < fingers.size())
                         {
-                            if (c < fingers.size())
-                            {
-                                int LED = fingers[c].x * 24;
-                                if (setLED)
-                                    if (int(fingers[c].x * 24) != int(x * 24))
-                                        senselSetLEDBrightness(handle, LED, 0);
-                                
-                                fingers[c].force = force;
-                                fingers[c].x = x;
-                                fingers[c].y = y;
-                                fingers[c].delta_x = delta_x;
-                                fingers[c].delta_y = delta_y;
-                                if (setLED)
-                                {
-                                    LED = x * 24;
-                                    int brightness = force * 100;
-                                    senselSetLEDBrightness(handle, LED, brightness);
-                                }
-                            }
-                        }
-                        else if (state == CONTACT_END)
-                        {
-                            if (c < fingers.size())
-                            {
-                                int led = fingers[c].x * 24;
-                                
-                                if (setLED)
-                                    senselSetLEDBrightness(handle, led, 0);
 
-                                fingers[c].state = false;
-                                fingers[c].force = force;
-                                fingers[c].x = x;
-                                fingers[c].y = y;
-                                fingers[c].delta_x = delta_x;
-                                fingers[c].delta_y = delta_y;
-                                fingers[c].fingerID = -1;
-                                --idx;
+                            if (setLED && prevLED != LED)
+                            {
+                                senselSetLEDBrightness(handle, LED, 0);
+                                senselSetLEDBrightness(handle, prevLED, 0);
                             }
+
+                            fingers[c].force = force;
+                            fingers[c].x = x;
+                            fingers[c].y = y;
+                            fingers[c].delta_x = delta_x;
+                            fingers[c].delta_y = delta_y;
+
+                            if (setLED)
+                                senselSetLEDBrightness(handle, LED, brightness);
+                        }
+                        else if (state == CONTACT_END && c < fingers.size())
+                        {
+
+                            if (setLED)
+                                senselSetLEDBrightness(handle, LED, 0);
+
+                            fingers[c].state = false;
+                            fingers[c].force = force;
+                            fingers[c].x = x;
+                            fingers[c].y = y;
+                            fingers[c].delta_x = delta_x;
+                            fingers[c].delta_y = delta_y;
+                            fingers[c].fingerID = -1;
+                            --idx;
                         }
                     }
                 }
